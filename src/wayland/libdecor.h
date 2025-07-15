@@ -1,0 +1,58 @@
+#pragma once
+
+#include "types.h"
+
+void load_libdecor();
+void unload_libdecor();
+bool using_libdecor();
+
+// @Incomplete: all of the places that use libdecor types in main program should be protected with HAS_LIBDECOR macro too...
+
+#ifdef HAS_LIBDECOR
+#include <libdecor.h>
+
+#define LIBDECOR_SYM(ret, name, ...) extern ret (* DYN_##name)(__VA_ARGS__);
+#include "libdecor_sym.h"
+#undef LIBDECOR_SYM
+
+#define libdecor_unref DYN_libdecor_unref
+#define libdecor_new DYN_libdecor_new
+#define libdecor_decorate DYN_libdecor_decorate
+#define libdecor_frame_unref DYN_libdecor_frame_unref
+#define libdecor_frame_set_title DYN_libdecor_frame_set_title
+#define libdecor_frame_set_app_id DYN_libdecor_frame_set_app_id
+#define libdecor_frame_set_max_content_size DYN_libdecor_frame_set_max_content_size
+#define libdecor_frame_set_min_content_size DYN_libdecor_frame_set_min_content_size
+#define libdecor_frame_resize DYN_libdecor_frame_resize
+#define libdecor_frame_move DYN_libdecor_frame_move
+#define libdecor_frame_commit DYN_libdecor_frame_commit
+#define libdecor_frame_set_minimized DYN_libdecor_frame_set_minimized
+#define libdecor_frame_set_maximized DYN_libdecor_frame_set_maximized
+#define libdecor_frame_unset_maximized DYN_libdecor_frame_unset_maximized
+#define libdecor_frame_set_fullscreen DYN_libdecor_frame_set_fullscreen
+#define libdecor_frame_unset_fullscreen DYN_libdecor_frame_unset_fullscreen
+#define libdecor_frame_set_capabilities DYN_libdecor_frame_set_capabilities
+#define libdecor_frame_unset_capabilities  DYN_libdecor_frame_unset_capabilities
+#define libdecor_frame_has_capability DYN_libdecor_frame_has_capability
+#define libdecor_frame_set_visibility DYN_libdecor_frame_set_visibility
+#define libdecor_frame_is_visible DYN_libdecor_frame_is_visible
+#define libdecor_frame_is_floating DYN_libdecor_frame_is_floating
+#define libdecor_frame_set_parent DYN_libdecor_frame_set_parent
+#define libdecor_frame_show_window_menu DYN_libdecor_frame_show_window_menu
+#define libdecor_frame_get_xdg_surface DYN_libdecor_frame_get_xdg_surface
+#define libdecor_frame_get_xdg_toplevel DYN_libdecor_frame_get_xdg_toplevel
+#define libdecor_frame_translate_coordinate DYN_libdecor_frame_translate_coordinate
+#define libdecor_frame_map DYN_libdecor_frame_map
+#define libdecor_state_new DYN_libdecor_state_new
+#define libdecor_state_free DYN_libdecor_state_free
+#define libdecor_configuration_get_content_size DYN_libdecor_configuration_get_content_size
+#define libdecor_configuration_get_window_size DYN_libdecor_configuration_get_window_state
+#define libdecor_dispatch DYN_libdecor_dispatch
+
+#else // HAS_LIBDECOR
+
+#define load_libdecor(...)
+#define unload_libdecor(...)
+#define using_libdecor(...) false
+
+#endif // HAS_LIBDECOR
