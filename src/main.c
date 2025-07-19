@@ -8,6 +8,7 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <dlfcn.h>
+#include <pthread.h>
 
 #include <linux/input-event-codes.h>
 
@@ -19,7 +20,6 @@
 #include "wayland/protocols/cursor-shape.h"
 #include "wayland/libdecor.h"
 
-#include "gdb.h"
 #include "types.h"
 #include "print.h"
 #include "temporary_storage.h"
@@ -1553,19 +1553,6 @@ void init_scene(client_state_t* state) {
 }
 
 int main() {
-    gdb_start_instance();
-
-#if 0
-    auto handle = gdb_send_command((gdb_command_t) {
-        .type = GDB_COMMAND_TYPE_LOAD_FILE,
-        .string = sprint("build/debugger"),
-        // .type = GDB_COMMAND_TYPE_PWD,
-    });
-
-    auto output = gdb_wait_command_result(handle);
-    printf("Pwd := %.*s\n", fmt(output.cwd));
-#endif
-
 
     client_state_t state = {};
     init_scene(&state);
@@ -1623,17 +1610,13 @@ int main() {
 
         if (FD_ISSET(fd, &set)) {
             wl_display_read_events(display);
+        } else {
+            wl_display_cancel_read(display);
         }
     }
 
-    gdb_send_command((gdb_command_t) {
-        .type = GDB_COMMAND_TYPE_QUIT,
-    });
-
     // TODO: this just doesn't work, use goto to jump here.
     wl_display_disconnect(display);
-
-    gdb_wait_until_finished();
     return 0;
 }
 

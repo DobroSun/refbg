@@ -51,7 +51,6 @@ srcs = [
   'src/align.c',
   'src/base.c',
   'src/print.c',
-  'src/gdb.c',
 ]
 
 protocol_base_dir = meson.current_source_dir() / 'src/wayland/protocols/'
